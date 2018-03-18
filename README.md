@@ -1,27 +1,34 @@
 
 
-# Overview 
+# Overview )
 
 ## Code I started with and changes I made
-This is a tweak of [Deep Learning Tutorial for Kaggle Ultrasound Nerve Segmentation competition, using Keras](https://github.com/jocicmarko/ultrasound-nerve-segmentation); original readme below.
+This is a tweak of [Deep Learning Tutorial for Kaggle Ultrasound Nerve Segmentation competition, using Keras](https://github.com/jocicmarko/ultrasound-nerve-segmentation)
 
-The code did not work as is was and I made a bunch of changes to get it running (for example the layers' outputs didn't match the next layers' expected inputs etc..)
+The code did not work out of the box and I made a bunch of changes to get it running (for example the layers outputs didn't match the next layers expected input etc..)
 
 
 
 ## Structure
 
 it's a bit messy as I was just playing around but..
-### /unet_samples.R: some R code to get the training images in the right format. There's more R scripts to make them from the raw geodata but it's on my work pc so don't have it here.
-### \*.h5: saved model weights
-### /raw/train: training data set. At the moment just a few thousand for testing if the code runs at all. */raw/ zipped to fit on github*
-#### input: 0000_sample.bmp
-#### labels: 0000_mask.bmp
-### /preds: target directory for predicted labels. check out the predicted label from the last time I ran the model (also contains input image and real labels for comparison)
-### data.py : prepares and normalises the data set. I made some changes here to get the normalisation right
-### train_less.py: my version of the model; I mainly made the network less deep. The less deep it is the smaller the spatial extent of the context that is taken into account, and I tried to match the distance to a guess of how far away pixels can be to still hold relevant information for the classification.
-### predict.py: to use a trained model for prediction
-### submission.py: kaggle competition stuff, haven't touched that.
+- /unet_samples.R: some messy R code I used to get the training images in the right format
+
+- \*.h5: saved model weights
+
+- /raw/train: training data set. At the moment just a few thousand for testing if the code runs at all. _zipped to fit on github_
+  - input: 0000_sample.bmp
+  - labels: 0000_mask.bmp
+
+- /preds: target directory for predicted labels. check out the predicted label from the last time I ran the model (also contains input image and real labels for comparison)
+
+- data.py : prepares and normalises the data set. I made some changes here to get the normalisation right
+
+- train_less.py: my version of the model; I mainly made the network less deep. The less deep it is the smaller the spatial extent of the context that is taken into account, and I tried to match the distance to a guess of how far away pixels can be to still hold relevant information for the classification.
+
+- predict.py: to use a trained model for prediction
+
+- submission.py: kaggle competition stuff, haven't touched that.
 
 
 
