@@ -14,7 +14,7 @@ The code did not work as is was and I made a bunch of changes to get it running 
 it's a bit messy as I was just playing around but..
 ### /unet_samples.R: some R code to get the training images in the right format. There's more R scripts to make them from the raw geodata but it's on my work pc so don't have it here.
 ### \*.h5: saved model weights
-### /raw/train: training data set. At the moment just a few thousand for testing if the code runs at all.
+### /raw/train: training data set. At the moment just a few thousand for testing if the code runs at all. */raw/ zipped to fit on github*
 #### input: 0000_sample.bmp
 #### labels: 0000_mask.bmp
 ### /preds: target directory for predicted labels. check out the predicted label from the last time I ran the model (also contains input image and real labels for comparison)
