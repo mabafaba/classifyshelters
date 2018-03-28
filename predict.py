@@ -116,18 +116,18 @@ def predict_only():
     print('-'*30)
     print('Loading saved weights...')
     print('-'*30)
-    model.load_weights('weights3.h5')
+    model.load_weights('/output/weights.h5')
 
     print('-'*30)
     print('Predicting masks on test data...')
     print('-'*30)
     imgs_mask_test = model.predict(imgs_test, verbose=1)
-    np.save('imgs_mask_test.npy', imgs_mask_test)
+    np.save('/output/imgs_mask_test.npy', imgs_mask_test)
 
     print('-' * 30)
     print('Saving predicted masks to files...')
     print('-' * 30)
-    pred_dir = 'preds'
+    pred_dir = '/output'
     if not os.path.exists(pred_dir):
         os.mkdir(pred_dir)
     for image, image_id in zip(imgs_mask_test, imgs_id_test):

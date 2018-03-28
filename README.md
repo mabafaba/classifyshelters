@@ -2,6 +2,21 @@
 
 # Overview )
 
+
+
+## todo
+- hook up floyd checkpoint transfer by mounting previous output folder
+- add error weight masks
+- check recommendations from the standford kids' paper
+
+## getting set up on floydhub
+
+floydhub is siiiik
+
+floyd run --gpu --data matinb/datasets/unet_npy:unet_npy "python train_less.py"
+
+
+
 ## Code I started with and changes I made
 This is a tweak of [Deep Learning Tutorial for Kaggle Ultrasound Nerve Segmentation competition, using Keras](https://github.com/jocicmarko/ultrasound-nerve-segmentation)
 

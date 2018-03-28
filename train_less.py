@@ -79,6 +79,9 @@ def get_unet():
     conv10 = Conv2D(1, (1, 1), activation='sigmoid')(conv9)
 
     model = Model(inputs=[inputs], outputs=[conv10])
+    # dont know why but i had commented this line.. which stopped loading existing weights (?)
+    # aha: IF YOU HAVE NO WEIGHTS YET YOU NEED TO UNCOMMENT THIS LINE
+    # when you run the the n>1th time copy the weights.h5 file from /output/ to /checkpoints/
     model.load_weights("weights.h5")
     model.compile(optimizer=Adam(lr=1e-5), loss=dice_coef_loss, metrics=[dice_coef])
 
@@ -120,14 +123,14 @@ def train_and_predict():
     print('-'*30)
     model = get_unet()
 
-    model_checkpoint = ModelCheckpoint('weights.h5', monitor='val_loss', save_best_only=True)
+    model_checkpoint = ModelCheckpoint('/output/weights.h5', monitor='val_loss', save_best_only=True)
 
     print('-'*30)
     print('Fitting model...')
     print('-'*30)
 
-    model.fit(imgs_train, imgs_mask_train, batch_size=80, nb_epoch=20, verbose=1, shuffle=True,
-              validation_split=0.2,
+    model.fit(imgs_train, imgs_mask_train, batch_size=50, nb_epoch=40, verbose=1, shuffle=True,
+              validation_split=0.15,
               callbacks=[model_checkpoint])
 
     print('-'*30)
@@ -142,18 +145,23 @@ def train_and_predict():
     print('-'*30)
     print('Loading saved weights...')
     print('-'*30)
-    model.load_weights('weights.h5')
+    # need to load newly trained weights from /output for prediction
+    # even though i load last trainings weights from /checkpoint.
+    # that's because floydhub only lets me write to /output/ during processing
+    # because I have to write them to /output/
+    #
+    model.load_weights('/output/weights.h5')
 
     print('-'*30)
     print('Predicting masks on test data...')
     print('-'*30)
     imgs_mask_test = model.predict(imgs_test, verbose=1)
-    np.save('imgs_mask_test.npy', imgs_mask_test)
+    np.save('/output/imgs_mask_test.npy', imgs_mask_test)
 
     print('-' * 30)
     print('Saving predicted masks to files...')
     print('-' * 30)
-    pred_dir = 'preds'
+    pred_dir = '/output'
     if not os.path.exists(pred_dir):
         os.mkdir(pred_dir)
     for image, image_id in zip(imgs_mask_test, imgs_id_test):

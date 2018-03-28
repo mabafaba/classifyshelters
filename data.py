@@ -56,14 +56,14 @@ def create_train_data():
         i += 1
     print('Loading done.')
 
-    np.save('imgs_train.npy', imgs)
-    np.save('imgs_mask_train.npy', imgs_mask)
+    np.save('/unet_npy/imgs_train.npy', imgs)
+    np.save('/unet_npy/imgs_mask_train.npy', imgs_mask)
     print('Saving to .npy files done.')
 
 
 def load_train_data():
-    imgs_train = np.load('imgs_train.npy')
-    imgs_mask_train = np.load('imgs_mask_train.npy')
+    imgs_train = np.load('/unet_npy/imgs_train.npy')
+    imgs_mask_train = np.load('/unet_npy/imgs_mask_train.npy')
     return imgs_train, imgs_mask_train
 
 
@@ -96,14 +96,14 @@ def create_test_data():
             print(img.shape)
         i += 1
     print('Loading done.')
-    np.save('imgs_test.npy', imgs)
-    np.save('imgs_id_test.npy', imgs_id)
+    np.save('/unet_npy/imgs_test.npy', imgs)
+    np.save('./unet_npy/imgs_id_test.npy', imgs_id)
     print('Saving to .npy files done.')
 
 
 def load_test_data():
-    imgs_test = np.load('imgs_test.npy')
-    imgs_id = np.load('imgs_id_test.npy')
+    imgs_test = np.load('/unet_npy/imgs_test.npy')
+    imgs_id = np.load('/unet_npy/imgs_id_test.npy')
     return imgs_test, imgs_id
 
 if __name__ == '__main__':
