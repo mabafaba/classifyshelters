@@ -1,5 +1,10 @@
-from __future__ import print_function
 
+#################################################
+# DEPENDENCIES
+#################################################
+
+# libraries
+from __future__ import print_function
 import os
 from skimage.transform import resize
 from skimage.io import imsave
@@ -9,35 +14,67 @@ from keras.layers import Input, concatenate, Conv2D, MaxPooling2D, Conv2DTranspo
 from keras.optimizers import Adam
 from keras.callbacks import ModelCheckpoint
 from keras import backend as K
-from keras.layers import BatchNormalization #added by rizki
+from keras.layers import BatchNormalization 
 
+# package parameters
 from data import load_train_data, load_test_data
-
 K.set_image_data_format('channels_last')  # TF dimension ordering in this code
 
-img_rows = 96
-img_cols = 96
-
-smooth = 1.
 
 
-def dice_coef(y_true, y_pred):
-    y_true_f = K.flatten(y_true)
-    y_pred_f = K.flatten(y_pred)
-    intersection = K.sum(y_true_f * y_pred_f)
-    return (2. * intersection + smooth) / (K.sum(y_true_f) + K.sum(y_pred_f) + smooth)
 
 
-def dice_coef_loss(y_true, y_pred):
-    return -dice_coef(y_true, y_pred)
+#################################################
+# PARAMETERS
+#################################################
+
+# data
+resize_image_height_to = 128
+resize_image_width_to  = 128
+smooth                 = 1.0
+test_data_fraction     = 0.15
+
+# computation 
+number_of_epochs = 40
+batch_size       = 80
 
 
-# Tried implementing archirecture as used in the following reference: 
-#      - https://blog.deepsense.ai/deep-learning-for-satellite-imagery-via-image-segmentation/      
-#      - https://blog.deepsense.ai/wp-content/uploads/2017/04/architecture_details.png
-# Note: they use 20 input layers.
+
+
+
+#################################################
+# MODEL
+#################################################
+
+# LOSS FUNCTION: dice coeff not used here; cross entropy instead (see below)
+
+# # dice coefficient
+# def dice_coef(y_true, y_pred):
+#     # truth as vector:
+#     y_true_f = K.flatten(y_true)
+#     # prediction as vector:
+#     y_pred_f = K.flatten(y_pred)
+#     # count predicted "1"s that are also true "1"s = count true positives
+#     intersection = K.sum(y_true_f * y_pred_f)
+#     # 2 * count true positives / ( count true "1"s + count predicted "1"s
+#     # returns 0 for all wrong
+#     # returns 0 for prediction all 0
+#     # returns 1 for all correct
+#     # how 'good' a value in between depends is on total % of true "1"s.
+#     return (2. * intersection + smooth) / (K.sum(y_true_f) + K.sum(y_pred_f) + smooth)
+
+# # loss is negative dice coefficient
+# def dice_coef_loss(y_true, y_pred):
+#     return -dice_coef(y_true, y_pred)
+
+
+# NETWORK
+
+    #      - https://blog.deepsense.ai/deep-learning-for-satellite-imagery-via-image-segmentation/      
+    #      - https://blog.deepsense.ai/wp-content/uploads/2017/04/architecture_details.png
+    #        Note: they use 20 input layers.
 def get_unet():
-    inputs = Input((img_rows, img_cols, 1))
+    inputs = Input((resize_image_height_to, resize_image_width_to, 1))
     conv1 = Conv2D(64, (3, 3), activation='relu', padding='same')(inputs)
     bn1 = BatchNormalization(momentum=0.01)(conv1)
     conv1 = Conv2D(64, (3, 3), activation='relu', padding='same')(bn1)
@@ -115,49 +152,68 @@ def get_unet():
     return model
 
 
-def preprocess(imgs):
-    imgs_p = np.ndarray((imgs.shape[0], img_rows, img_cols), dtype=np.uint8)
-    for i in range(imgs.shape[0]):
-        imgs_p[i] = resize(imgs[i], (img_cols, img_rows), preserve_range=True)
 
+
+
+def preprocess(imgs):
+    # resize images
+    imgs_p = np.ndarray((imgs.shape[0], resize_image_height_to, resize_image_width_to), dtype=np.uint8)
+    for i in range(imgs.shape[0]):
+        imgs_p[i] = resize(imgs[i], (resize_image_width_to, resize_image_height_to), preserve_range=True)
     imgs_p = imgs_p[..., np.newaxis]
     return imgs_p
 
-
 def train_and_predict():
+
+    #################
+    # TRAIN
+    #################
+
+    # DATA LOADING AND PREPROCESSING
     print('-'*30)
     print('Loading and preprocessing train data...')
     print('-'*30)
-    imgs_train, imgs_mask_train = load_train_data()
 
+    # load input images
+    imgs_train, imgs_mask_train = load_train_data()
     imgs_train = preprocess(imgs_train)
     imgs_mask_train = preprocess(imgs_mask_train)
     imgs_train = imgs_train.astype('float32')
+
+    # normalise data
+        # this should probably happen in the preprocessing function or something.. not here
     mean = np.mean(imgs_train)  # mean for data centering
     std = np.std(imgs_train)  # std for data normalization
-
     imgs_train -= mean
     if std!=0:
         imgs_train /= std
 
-
+    # load label masks
     imgs_mask_train = imgs_mask_train.astype('float32')
-    imgs_mask_train /= 255.  # scale masks to [0, 1]
-    print('mask max')
+    # scale masks to [0, 1]
+    imgs_mask_train /= 255.  
 
+    # BUILD MODEL
     print('-'*30)
     print('Creating and compiling model...')
     print('-'*30)
     model = get_unet()
+    # set up saving weights at checkpoints
     model_checkpoint = ModelCheckpoint('weights.h5', monitor='val_loss', save_best_only=True)
 
+    # FIT MODEL
     print('-'*30)
     print('Fitting model...')
     print('-'*30)
 
-    model.fit(imgs_train, imgs_mask_train, batch_size=40, nb_epoch=1, verbose=1, shuffle=True,
-              validation_split=0.2,
+    model.fit(imgs_train, imgs_mask_train, batch_size=batch_size, nb_epoch=number_of_epochs, verbose=1, shuffle=True,
+              validation_split=test_data_fraction,
               callbacks=[model_checkpoint])
+
+
+    #################
+    # TEST
+    #################
 
     print('-'*30)
     print('Loading and preprocessing test data...')
@@ -193,5 +249,10 @@ def train_and_predict():
     #     image = (image[:, :, 0] * 255.).astype(np.uint8)
     #     imsave(os.path.join(pred_dir, str(image_id) + '_trainpred.png'), image)
 
+
+# What to do when this file is run:
+
 if __name__ == '__main__':
     train_and_predict()
+
+
