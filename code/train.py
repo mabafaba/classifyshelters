@@ -3,25 +3,25 @@
 # DEPENDENCIES
 #################################################
 
-# # libraries
-# from __future__ import print_function
-# import os
-# from skimage.transform import resize
-# from skimage.io import imsave
-# import numpy as np
-# from keras.models import Model
-# from keras.layers import Input, concatenate, Conv2D, MaxPooling2D, Conv2DTranspose
-# from keras.optimizers import Adam
-# from keras.callbacks import ModelCheckpoint
-# from keras import backend as K
-# from keras.layers import BatchNormalization 
+# libraries
+from __future__ import print_function
+import os
+from skimage.transform import resize
+from skimage.io import imsave
+import numpy as np
+from keras.models import Model
+from keras.layers import Input, concatenate, Conv2D, MaxPooling2D, Conv2DTranspose
+from keras.optimizers import Adam
+from keras.callbacks import ModelCheckpoint
+from keras import backend as K
+from keras.layers import BatchNormalization 
 
-# # package parameters
+# package parameters
 
-# # this one is our code: ./code/preprocessing/data.py
-# from preprocessing.data import load_train_data, load_test_data
+# this one is our code: ./code/preprocessing/data.py
+from preprocessing.data import load_train_data, load_test_data
 
-# K.set_image_data_format('channels_last')  # TF dimension ordering in this code
+K.set_image_data_format('channels_last')  # TF dimension ordering in this code
 
 
 #################################################

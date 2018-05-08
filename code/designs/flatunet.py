@@ -1,3 +1,6 @@
+
+# CITATION
+#################################################
 #      - https://blog.deepsense.ai/deep-learning-for-satellite-imagery-via-image-segmentation/      
 #      - https://blog.deepsense.ai/wp-content/uploads/2017/04/architecture_details.png
 #        Note: they use 20 input layers.
