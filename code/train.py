@@ -3,26 +3,29 @@
 # DEPENDENCIES
 #################################################
 
-# libraries
-from __future__ import print_function
-import os
-from skimage.transform import resize
-from skimage.io import imsave
-import numpy as np
-from keras.models import Model
-from keras.layers import Input, concatenate, Conv2D, MaxPooling2D, Conv2DTranspose
-from keras.optimizers import Adam
-from keras.callbacks import ModelCheckpoint
-from keras import backend as K
-from keras.layers import BatchNormalization 
+# # libraries
+# from __future__ import print_function
+# import os
+# from skimage.transform import resize
+# from skimage.io import imsave
+# import numpy as np
+# from keras.models import Model
+# from keras.layers import Input, concatenate, Conv2D, MaxPooling2D, Conv2DTranspose
+# from keras.optimizers import Adam
+# from keras.callbacks import ModelCheckpoint
+# from keras import backend as K
+# from keras.layers import BatchNormalization 
 
-# package parameters
-from data import load_train_data, load_test_data
-K.set_image_data_format('channels_last')  # TF dimension ordering in this code
+# # package parameters
+
+# # this one is our code: ./code/preprocessing/data.py
+# from preprocessing.data import load_train_data, load_test_data
+
+# K.set_image_data_format('channels_last')  # TF dimension ordering in this code
 
 
 #################################################
-# PARAMETERS
+# TRAINING PARAMETERS
 #################################################
 
 number_of_epochs = 40
@@ -35,12 +38,11 @@ test_data_fraction     = 0.15
 #################################################
 # MODEL
 #################################################
-	# every model file should have at least:
-		# preprocess() <- a function for data preprocessing
-		# get_model() <- a function to return the model
-		# now we load the new rizki version that removes filters and adds batch normalisation:
+# every design module should have a least:
+# build(): returns the actual model
+# preprocess(): reshape input data
 
-import 0002_unet_fewer_filters
+from   designs import flatunet as design
 
 
 def train_and_predict():
@@ -56,8 +58,8 @@ def train_and_predict():
 
     # load input images
     imgs_train, imgs_mask_train = load_train_data()
-    imgs_train = preprocess(imgs_train)
-    imgs_mask_train = preprocess(imgs_mask_train)
+    imgs_train = design.preprocess(imgs_train)
+    imgs_mask_train = design.preprocess(imgs_mask_train)
     imgs_train = imgs_train.astype('float32')
 
     # normalise data
@@ -80,7 +82,7 @@ def train_and_predict():
     print('Creating and compiling model...')
     print('-'*30)
     # get_unet()
-    model = get_model()
+    model = design.build()
     # set up saving weights at checkpoints
     model_checkpoint = ModelCheckpoint('weights.h5', monitor='val_loss', save_best_only=True)
 
@@ -95,14 +97,14 @@ def train_and_predict():
 
 
     #################
-    # TEST
+    # PREDICT
     #################
 
     print('-'*30)
     print('Loading and preprocessing test data...')
     print('-'*30)
     imgs_test, imgs_id_test = load_test_data()
-    imgs_test = preprocess(imgs_test)
+    imgs_test = design.preprocess(imgs_test)
 
     imgs_test = imgs_test.astype('float32')
     imgs_test -= mean
@@ -129,10 +131,8 @@ def train_and_predict():
         imsave(os.path.join(pred_dir, str(image_id) + '_pred.png'), image)
 
 
-    # i forgot what this does exactly but i had commented it out at some point.
-    # looks like it's scaling a matrix back up to 0-255 and saves it as png.
-    # i think it's predicting the data it was trained on:
 
+    # i think this is predicting the training data and saves results as images:
     # for image, image_id in zip(imgs_train, imgs_id_test):
     #     image = (image[:, :, 0] * 255.).astype(np.uint8)
     #     imsave(os.path.join(pred_dir, str(image_id) + '_trainpred.png'), image)
