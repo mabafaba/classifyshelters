@@ -15,10 +15,7 @@ from keras.optimizers import Adam
 from keras.callbacks import ModelCheckpoint
 from keras import backend as K
 from keras.layers import BatchNormalization 
-
-# package parameters
-
-# this one is our code: ./code/preprocessing/data.py
+# this is our code: ./code/preprocessing/data.py
 from preprocessing.data import load_train_data, load_test_data
 
 K.set_image_data_format('channels_last')  # TF dimension ordering in this code
@@ -42,7 +39,7 @@ test_data_fraction     = 0.15
 # build(): returns the actual model
 # preprocess(): reshape input data
 
-from   designs import flatunet as design
+from designs import flatunet as design
 
 
 def train_and_predict():
@@ -57,7 +54,7 @@ def train_and_predict():
     print('-'*30)
 
     # load input images
-    imgs_train, imgs_mask_train = load_train_data()
+    imgs_train, imgs_mask_train = preprocessing.data.load_train_data()
     imgs_train = design.preprocess(imgs_train)
     imgs_mask_train = design.preprocess(imgs_mask_train)
     imgs_train = imgs_train.astype('float32')
@@ -103,7 +100,7 @@ def train_and_predict():
     print('-'*30)
     print('Loading and preprocessing test data...')
     print('-'*30)
-    imgs_test, imgs_id_test = load_test_data()
+    imgs_test, imgs_id_test = preprocessing.data.load_test_data()
     imgs_test = design.preprocess(imgs_test)
 
     imgs_test = imgs_test.astype('float32')
