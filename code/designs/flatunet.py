@@ -1,23 +1,21 @@
+
+# CITATION
+#################################################
 #      - https://blog.deepsense.ai/deep-learning-for-satellite-imagery-via-image-segmentation/      
 #      - https://blog.deepsense.ai/wp-content/uploads/2017/04/architecture_details.png
 #        Note: they use 20 input layers.
 
 
 
-# DATA/MODEL PARAMETERS
+# MODEL PARAMETERS
 #################################################
-
-    resize_image_height_to = 128
-    resize_image_width_to  = 128
-    smooth                 = 1.0
-
+smooth                 = 1.0
+resize_image_height_to = 128
+resize_image_width_to  = 128
 
 # PREPARING DATA
 #################################################
 
-# preprocess() 
-# would depend on the data as well as the model, so I'm not sure this is the right place.
-# for now let's keep a preprocessing function in one file with the matching model
 def preprocess(imgs):
     # resize images
     imgs_p = np.ndarray((imgs.shape[0], resize_image_height_to, resize_image_width_to), dtype=np.uint8)
@@ -30,7 +28,7 @@ def preprocess(imgs):
 # MODEL
 #################################################
 
-def get_model():
+def build():
     inputs = Input((resize_image_height_to, resize_image_width_to, 1))
     conv1 = Conv2D(64, (3, 3), activation='relu', padding='same')(inputs)
     bn1 = BatchNormalization(momentum=0.01)(conv1)
@@ -107,3 +105,5 @@ def get_model():
     model.compile(optimizer=Adam(lr=1e-5), loss='binary_crossentropy', metrics=['binary_accuracy']) #modified by rizki.
 
     return model
+
+
