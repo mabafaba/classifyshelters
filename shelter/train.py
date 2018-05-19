@@ -1,61 +1,41 @@
-
-#################################################
-# DEPENDENCIES
-#################################################
-
-# libraries
-from __future__ import print_function
 import os
-from skimage.transform import resize
-from skimage.io import imsave
 import numpy as np
-from keras.models import Model
-from keras.layers import Input, concatenate, Conv2D, MaxPooling2D, Conv2DTranspose
-from keras.optimizers import Adam
-from keras.callbacks import ModelCheckpoint
+
+from skimage.io import imsave
+from skimage.transform import resize
+
 from keras import backend as K
-from keras.layers import BatchNormalization 
-# this is our code: ./code/preprocessing/data.py
-from preprocessing.data import load_train_data, load_test_data
+from keras.models import Model
+from keras.optimizers import Adam
+from keras.layers import BatchNormalization
+from keras.callbacks import ModelCheckpoint
+from keras.layers import Input, concatenate, Conv2D, MaxPooling2D, Conv2DTranspose
 
 K.set_image_data_format('channels_last')  # TF dimension ordering in this code
 
+from shelter.preprocessing.data import load_train_data
 
-#################################################
-# TRAINING PARAMETERS
-#################################################
-
-number_of_epochs = 40
-batch_size       = 80
-test_data_fraction     = 0.15
-
-
-
-
-#################################################
 # MODEL
-#################################################
 # every design module should have a least:
 # build(): returns the actual model
 # preprocess(): reshape input data
+from shelter.designs import flatunet as design
 
-from designs import flatunet as design
 
-#################
+# TRAINING PARAMETERS
+number_of_epochs = 40
+batch_size = 80
+test_data_fraction = 0.15
+
+
 # TRAIN
-#################
-
-def train():
-
-    
+def train(data_path):
 
     # DATA LOADING AND PREPROCESSING
-    print('-'*30)
     print('Loading and preprocessing train data...')
-    print('-'*30)
 
     # load input images
-    imgs_train, imgs_mask_train = preprocessing.data.load_train_data()
+    imgs_train, imgs_mask_train = load_train_data(data_path)
     imgs_train = design.preprocess(imgs_train)
     imgs_mask_train = design.preprocess(imgs_mask_train)
     imgs_train = imgs_train.astype('float32')
@@ -76,31 +56,24 @@ def train():
     imgs_mask_train /= 255.  
 
     # BUILD MODEL
-    print('-'*30)
     print('Creating and compiling model...')
-    print('-'*30)
     # get_unet()
     model = design.build()
     # set up saving weights at checkpoints
     model_checkpoint = ModelCheckpoint('weights.h5', monitor='val_loss', save_best_only=True)
 
     # FIT MODEL
-    print('-'*30)
     print('Fitting model...')
-    print('-'*30)
 
     model.fit(imgs_train, imgs_mask_train, batch_size=batch_size, nb_epoch=number_of_epochs, verbose=1, shuffle=True,
               validation_split=test_data_fraction,
               callbacks=[model_checkpoint])
 
 
-
-
-
-
 # What to do when this file is run:
-
 if __name__ == '__main__':
-    train_and_predict()
+    data_path = '/media/data/180505_v1/model_input/'
+
+    train(data_path)
 
 

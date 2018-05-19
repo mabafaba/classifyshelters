@@ -1,33 +1,38 @@
+import numpy as np
+
+from skimage.transform import resize
+
+from keras.models import Model
+from keras.optimizers import Adam
+from keras.layers import BatchNormalization
+from keras.layers import Input, concatenate, Conv2D, MaxPooling2D, Conv2DTranspose
+
 
 # CITATION
-#################################################
-#      - https://blog.deepsense.ai/deep-learning-for-satellite-imagery-via-image-segmentation/      
-#      - https://blog.deepsense.ai/wp-content/uploads/2017/04/architecture_details.png
-#        Note: they use 20 input layers.
-
+# - https://blog.deepsense.ai/deep-learning-for-satellite-imagery-via-image-segmentation/
+# - https://blog.deepsense.ai/wp-content/uploads/2017/04/architecture_details.png
+#   Note: they use 20 input layers.
 
 
 # MODEL PARAMETERS
-#################################################
-smooth                 = 1.0
+smooth = 1.0
 resize_image_height_to = 128
-resize_image_width_to  = 128
+resize_image_width_to = 128
+
 
 # PREPARING DATA
-#################################################
-
 def preprocess(imgs):
     # resize images
     imgs_p = np.ndarray((imgs.shape[0], resize_image_height_to, resize_image_width_to), dtype=np.uint8)
+
     for i in range(imgs.shape[0]):
         imgs_p[i] = resize(imgs[i], (resize_image_width_to, resize_image_height_to), preserve_range=True)
     imgs_p = imgs_p[..., np.newaxis]
+
     return imgs_p
 
 
 # MODEL
-#################################################
-
 def build():
     inputs = Input((resize_image_height_to, resize_image_width_to, 1))
     conv1 = Conv2D(64, (3, 3), activation='relu', padding='same')(inputs)
