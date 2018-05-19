@@ -3,5 +3,13 @@
 *.csv
 *.hdf5
 *.h5
+
+# Mac finder
 .DS_Store
+
+# PyCharm
 .idea
+
+# Packaging
+*.egg-info/
+*.egg
