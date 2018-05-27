@@ -7,6 +7,8 @@ from keras.optimizers import Adam
 from keras.layers import BatchNormalization
 from keras.layers import Input, concatenate, Conv2D, MaxPooling2D, Conv2DTranspose
 
+from shelter.designs.components.loss_functions import dice_coef_loss
+
 
 # CITATION
 # - https://blog.deepsense.ai/deep-learning-for-satellite-imagery-via-image-segmentation/
@@ -107,8 +109,7 @@ def build():
 
     model = Model(inputs=[inputs], outputs=[conv10])
 
-    model.compile(optimizer=Adam(lr=1e-5), loss='binary_crossentropy', metrics=['binary_accuracy']) #modified by rizki.
+    # model.compile(optimizer=Adam(lr=1e-5), loss='binary_crossentropy', metrics=['binary_accuracy']) #modified by rizki.
+    model.compile(optimizer=Adam(lr=1e-5), loss=dice_coef_loss, metrics=['binary_accuracy'])
 
     return model
-
-

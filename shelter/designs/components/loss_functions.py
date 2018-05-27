@@ -1,3 +1,8 @@
+from keras import backend as K
+
+
+smooth = 1.0
+
 # # dice coefficient
 def dice_coef(y_true, y_pred):
     # truth as vector:
