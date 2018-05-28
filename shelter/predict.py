@@ -49,7 +49,7 @@ def predict(data_path):
         os.mkdir(out_path)
     for image, image_id in zip(imgs_mask_test, imgs_id_test):
         image = (image[:, :, 0] * 255.).astype(np.uint8)
-        imsave(os.path.join(out_path, str(image_id) + '_pred.png'), image)
+        imsave(os.path.join(out_path, '{0:0>5}_pred.png'.format(image_id)), image)
 
     # for image, image_id in zip(imgs_train, imgs_id_test):
     #     image = (image[:, :, 0] * 255.).astype(np.uint8)

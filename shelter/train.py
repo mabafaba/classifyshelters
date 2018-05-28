@@ -22,14 +22,10 @@ from shelter.preprocessing.data import load_train_data
 from shelter.designs import flatunet as design
 
 
-# TRAINING PARAMETERS
-number_of_epochs = 40
-batch_size = 80
-test_data_fraction = 0.15
-
-
-# TRAIN
-def train(data_path):
+def train(data_path,
+          number_of_epochs=40,
+          batch_size=80,
+          test_data_fraction=0.15):
 
     # DATA LOADING AND PREPROCESSING
     print('Loading and preprocessing train data...')
@@ -71,7 +67,7 @@ def train(data_path):
     print('Fitting model...')
     model.fit(imgs_train, imgs_mask_train,
               batch_size=batch_size,
-              nb_epoch=number_of_epochs,
+              epochs=number_of_epochs,
               verbose=1,
               shuffle=True,
               validation_split=test_data_fraction,
@@ -80,7 +76,7 @@ def train(data_path):
 
 # What to do when this file is run:
 if __name__ == '__main__':
-    data_path = '/media/data/180505_v1/model_input/'
+    data_path = '/media/data/180505_v1/'
 
     train(data_path)
 
