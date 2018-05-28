@@ -35,7 +35,8 @@ def train(data_path):
     print('Loading and preprocessing train data...')
 
     # load input images
-    imgs_train, imgs_mask_train = load_train_data(data_path)
+    input_path = os.path.join(data_path, 'model_input')
+    imgs_train, imgs_mask_train = load_train_data(input_path)
     imgs_train = design.preprocess(imgs_train)
     imgs_mask_train = design.preprocess(imgs_mask_train)
     imgs_train = imgs_train.astype('float32')
@@ -45,7 +46,7 @@ def train(data_path):
     mean = np.mean(imgs_train)  # mean for data centering
     std = np.std(imgs_train)  # std for data normalization
     imgs_train -= mean
-    if std!=0:
+    if std != 0:
         imgs_train /= std
 
     # load label masks
@@ -60,12 +61,19 @@ def train(data_path):
     # get_unet()
     model = design.build()
     # set up saving weights at checkpoints
-    model_checkpoint = ModelCheckpoint('weights.h5', monitor='val_loss', save_best_only=True)
+    ckpt_dir = os.path.join(data_path, 'model_ckpts')
+    ckpt_file = os.path.join(ckpt_dir, 'weights.h5')
+    model_checkpoint = ModelCheckpoint(ckpt_file,
+                                       monitor='val_loss',
+                                       save_best_only=True)
 
     # FIT MODEL
     print('Fitting model...')
-
-    model.fit(imgs_train, imgs_mask_train, batch_size=batch_size, nb_epoch=number_of_epochs, verbose=1, shuffle=True,
+    model.fit(imgs_train, imgs_mask_train,
+              batch_size=batch_size,
+              nb_epoch=number_of_epochs,
+              verbose=1,
+              shuffle=True,
               validation_split=test_data_fraction,
               callbacks=[model_checkpoint])
 
