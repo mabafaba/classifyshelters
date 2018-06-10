@@ -92,8 +92,8 @@ def build():
     # dont know why but i had commented this line.. which stopped loading existing weights (?)
     # aha: IF YOU HAVE NO WEIGHTS YET YOU NEED TO UNCOMMENT THIS LINE
     # when you run the the n>1th time copy the weights.h5 file from /output/ to /checkpoints/
-    model.load_weights("weights.h5")
-    model.compile(optimizer=Adam(lr=1e-5), loss=dice_coef_loss, metrics=[dice_coef])
+    # model.load_weights("weights.h5")
+    model.compile(optimizer=Adam(lr=1e-5), loss=dice_coef_loss, metrics=[dice_coef_loss])
 
     return model
 

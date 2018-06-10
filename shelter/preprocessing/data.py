@@ -25,11 +25,11 @@ def create_train_data(data_path):
     for i, image_name in enumerate(images):
         if not any(x in image_name for x in ['mask', '.bmp']):
             image_mask_name = image_name.split('_sample.bmp')[0] + '_mask.bmp'
-            img = imread(os.path.join(train_data_path, image_name), as_grey=True)
+            img = imread(os.path.join(train_data_path, image_name), as_gray=True)
             img = np.array([img])
             # img = img.squeeze()
 
-            img_mask = imread(os.path.join(train_data_path, image_mask_name), as_grey=True)
+            img_mask = imread(os.path.join(train_data_path, image_mask_name), as_gray=True)
             img_mask = np.array([img_mask])
 
             imgs[i] = img
@@ -75,7 +75,7 @@ def create_test_data(data_path):
         if '.bmp' not in image_name:
             continue
         img_id = int(image_name.split('_')[0])
-        img = imread(os.path.join(test_data_path, image_name), as_grey=True)
+        img = imread(os.path.join(test_data_path, image_name), as_gray=True)
         img = np.array([img])
         imgs[i] = img
         imgs_id[i] = img_id
