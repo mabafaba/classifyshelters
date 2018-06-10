@@ -6,7 +6,7 @@ from keras import backend as K
 from shelter.preprocessing.data import load_train_data, load_test_data
 K.set_image_data_format('channels_last')  # TF dimension ordering in this code
 
-from shelter.designs import flatunet as design
+from shelter.designs import unet as design
 
 
 def predict(data_path):

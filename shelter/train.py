@@ -19,7 +19,7 @@ from shelter.preprocessing.data import load_train_data
 # every design module should have a least:
 # build(): returns the actual model
 # preprocess(): reshape input data
-from shelter.designs import flatunet as design
+from shelter.designs import unet as design
 
 
 def train(data_path,
