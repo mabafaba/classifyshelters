@@ -66,13 +66,15 @@ def train(data_path,
 
     # FIT MODEL
     print('Fitting model...')
-    model.fit(imgs_train, imgs_mask_train,
+    model_out = model.fit(imgs_train, imgs_mask_train,
               batch_size=batch_size,
               epochs=number_of_epochs,
               verbose=1,
               shuffle=True,
               validation_split=test_data_fraction,
               callbacks=[model_checkpoint])
+
+    return model_out
 
 
 # What to do when this file is run:
