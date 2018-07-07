@@ -101,7 +101,7 @@ def load_test_data(data_path):
 
 
 if __name__ == '__main__':
-    data_path = '/media/data'
+    # data_path = '/media/data'
 
     create_train_data(data_path)
     create_test_data(data_path)

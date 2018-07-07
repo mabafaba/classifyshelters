@@ -31,7 +31,8 @@ def train(data_path,
     print('Loading and preprocessing train data...')
 
     # load input images
-    input_path = os.path.join(data_path, 'model_input')
+    # input_path = os.path.join(data_path, 'model_input')
+    input_path = data_path
     imgs_train, imgs_mask_train = load_train_data(input_path)
     imgs_train = design.preprocess(imgs_train)
     imgs_mask_train = design.preprocess(imgs_mask_train)
