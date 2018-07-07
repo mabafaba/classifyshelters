@@ -26,6 +26,7 @@ def create_train_data(data_path):
         if not any(x in image_name for x in ['mask', '.bmp']):
             image_mask_name = image_name.split('_sample.bmp')[0] + '_mask.bmp'
             if 'DS_Store' in image_name: continue
+            if not ('sample' in image_name or 'mask' in image_name):continue
             print ('image_name',image_name)
             img = imread(os.path.join(train_data_path, image_name), as_gray=True)
             img = np.array([img])
