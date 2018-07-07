@@ -58,7 +58,7 @@ def train(data_path,
     # get_unet()
     model = design.build()
     # set up saving weights at checkpoints
-    ckpt_dir = os.path.join(data_path, 'model_ckpts')
+    ckpt_dir = os.path.join(data_path, 'internal/checkpoints')
     ckpt_file = os.path.join(ckpt_dir, 'weights.h5')
     model_checkpoint = ModelCheckpoint(ckpt_file,
                                        monitor='val_loss',

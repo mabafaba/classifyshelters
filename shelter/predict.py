@@ -11,7 +11,7 @@ from shelter.designs import unet as design
 
 def predict(data_path):
 
-    input_path = os.path.join(data_path, 'model_input')
+    input_path = os.path.join(data_path, 'input')
     imgs_train, imgs_mask_train = load_train_data(input_path)
     print(len(imgs_train))
 
@@ -33,7 +33,7 @@ def predict(data_path):
     imgs_test /= std
     print('Loading saved weights...')
 
-    ckpt_path = os.path.join(data_path, 'model_ckpts')
+    ckpt_path = os.path.join(data_path, 'internal/checkpoints')
     ckpt_file = os.path.join(ckpt_path, 'weights.h5')
     model.load_weights(ckpt_file)
 
