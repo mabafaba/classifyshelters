@@ -25,6 +25,8 @@ def create_train_data(data_path):
     for i, image_name in enumerate(images):
         if not any(x in image_name for x in ['mask', '.bmp']):
             image_mask_name = image_name.split('_sample.bmp')[0] + '_mask.bmp'
+            if 'DS_Store' in image_name: continue
+            print ('image_name',image_name)
             img = imread(os.path.join(train_data_path, image_name), as_gray=True)
             img = np.array([img])
             # img = img.squeeze()
@@ -72,8 +74,8 @@ def create_test_data(data_path):
     print('Dataset size:', len(images))
 
     for i, image_name in enumerate(images):
-        if '.bmp' not in image_name:
-            continue
+        if 'DS_Store' in image_name: continue
+        if '.bmp' not in image_name: continue
         img_id = int(image_name.split('_')[0])
         img = imread(os.path.join(test_data_path, image_name), as_gray=True)
         img = np.array([img])
