@@ -11,8 +11,8 @@ from shelter.designs import unet as design
 
 def predict(data_path):
 
-    input_path = os.path.join(data_path, 'model_input')
-    imgs_train, imgs_mask_train = load_train_data(input_path)
+    # input_path = os.path.join(data_path, 'input')
+    imgs_train, imgs_mask_train = load_train_data(data_path)
     print(len(imgs_train))
 
     imgs_train = design.preprocess(imgs_train)
@@ -25,7 +25,7 @@ def predict(data_path):
    
     print('Loading and preprocessing test data...')
 
-    imgs_test, imgs_id_test = load_test_data(input_path)
+    imgs_test, imgs_id_test = load_test_data(data_path)
     imgs_test = design.preprocess(imgs_test)
 
     imgs_test = imgs_test.astype('float32')
@@ -33,15 +33,15 @@ def predict(data_path):
     imgs_test /= std
     print('Loading saved weights...')
 
-    ckpt_path = os.path.join(data_path, 'model_ckpts')
+    ckpt_path = os.path.join(data_path, 'internal/checkpoints')
     ckpt_file = os.path.join(ckpt_path, 'weights.h5')
     model.load_weights(ckpt_file)
 
     print('Predicting masks on test data...')
     imgs_mask_test = model.predict(imgs_test, verbose=1)
 
-    out_path = os.path.join(data_path, 'model_output')
-    out_file = os.path.join(out_path, 'imgs_mask_test.npy')
+    out_path = os.path.join(data_path, 'output')
+    out_file = os.path.join(data_path, 'internal/imgs_mask_test.npy')
     np.save(out_file, imgs_mask_test)
 
     print('Saving predicted masks to files...')

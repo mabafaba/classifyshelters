@@ -12,7 +12,7 @@ def rgb2gray(rgb):
 
 
 def create_train_data(data_path):
-    train_data_path = os.path.join(data_path, 'train')
+    train_data_path = os.path.join(data_path, 'input/train')
     images = [path for path in os.listdir(train_data_path) if not path.startswith('Icon')]
     total = int(len(images) / 2)
 
@@ -51,20 +51,20 @@ def create_train_data(data_path):
 
     print('Loading done.')
 
-    np.save(os.path.join(data_path, 'imgs_train.npy'), imgs)
-    np.save(os.path.join(data_path, 'imgs_mask_train.npy'), imgs_mask)
+    np.save(os.path.join(data_path, 'internal/npy/imgs_train.npy'), imgs)
+    np.save(os.path.join(data_path, 'internal/npy/imgs_mask_train.npy'), imgs_mask)
     print('Saving to .npy files done.')
 
 
 def load_train_data(data_path):
-    imgs_train = np.load(os.path.join(data_path, 'imgs_train.npy'))
-    imgs_mask_train = np.load(os.path.join(data_path, 'imgs_mask_train.npy'))
+    imgs_train = np.load(os.path.join(data_path, 'internal/npy/imgs_train.npy'))
+    imgs_mask_train = np.load(os.path.join(data_path, 'internal/npy/imgs_mask_train.npy'))
 
     return imgs_train, imgs_mask_train
 
 
 def create_test_data(data_path):
-    test_data_path = os.path.join(data_path, 'test')
+    test_data_path = os.path.join(data_path, 'input/test')
     images = [path for path in os.listdir(test_data_path) if not path.startswith('Icon')]
     total = len(images)
 
@@ -91,15 +91,14 @@ def create_test_data(data_path):
         #     print(img.shape)
 
     print('Loading done.')
-    np.save(os.path.join(data_path, 'imgs_test.npy'), imgs)
-    np.save(os.path.join(data_path, 'imgs_id_test.npy'), imgs_id)
+    np.save(os.path.join(data_path, 'internal/npy/imgs_test.npy'), imgs)
+    np.save(os.path.join(data_path, 'internal/npy/imgs_id_test.npy'), imgs_id)
     print('Saving to .npy files done.')
 
 
 def load_test_data(data_path):
-    imgs_test = np.load(os.path.join(data_path, 'imgs_test.npy'))
-    imgs_id = np.load(os.path.join(data_path, 'imgs_id_test.npy'))
-
+    imgs_test = np.load(os.path.join(data_path, 'internal/npy/imgs_test.npy'))
+    imgs_id = np.load(os.path.join(data_path, 'internal/npy/imgs_id_test.npy'))
     return imgs_test, imgs_id
 
 
