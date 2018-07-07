@@ -12,7 +12,7 @@ def rgb2gray(rgb):
 
 
 def create_train_data(data_path):
-    train_data_path = os.path.join(data_path, 'train')
+    train_data_path = os.path.join(data_path, 'model_input/train')
     images = [path for path in os.listdir(train_data_path) if not path.startswith('Icon')]
     total = int(len(images) / 2)
 
@@ -61,7 +61,7 @@ def load_train_data(data_path):
 
 
 def create_test_data(data_path):
-    test_data_path = os.path.join(data_path, 'test')
+    test_data_path = os.path.join(data_path, 'model_input/test')
     images = [path for path in os.listdir(test_data_path) if not path.startswith('Icon')]
     total = len(images)
 

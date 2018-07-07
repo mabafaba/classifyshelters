@@ -23,8 +23,8 @@ from shelter.designs import unet as design
 
 
 def train(data_path,
-          number_of_epochs=40,
-          batch_size=80,
+          number_of_epochs=2,
+          batch_size=10,
           test_data_fraction=0.15):
 
     # DATA LOADING AND PREPROCESSING
