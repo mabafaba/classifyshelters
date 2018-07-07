@@ -40,8 +40,8 @@ def predict(data_path):
     print('Predicting masks on test data...')
     imgs_mask_test = model.predict(imgs_test, verbose=1)
 
-    out_path = os.path.join(data_path, 'model_output')
-    out_file = os.path.join(out_path, 'imgs_mask_test.npy')
+    out_path = os.path.join(data_path, 'output')
+    out_file = os.path.join(data_path, 'internal/imgs_mask_test.npy')
     np.save(out_file, imgs_mask_test)
 
     print('Saving predicted masks to files...')
