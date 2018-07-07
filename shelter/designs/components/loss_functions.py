@@ -21,12 +21,6 @@ def dice_coef_loss(y_true, y_pred):
     return -dice_coef(y_true, y_pred)
 
 
-
-# loss is negative dice coefficient
-def dice_coef_loss(y_true, y_pred):
-    return -dice_coef(y_true, y_pred)
-
-
 # # dice coefficient
 # def dice_coef(truth, prediction):
 #     truth = K.flatten(truth)
