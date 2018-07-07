@@ -42,6 +42,9 @@ def preprocess(imgs):
 # MODEL
 def build():
 # expected input shape
+
+    print('using model: unet') 
+    
     inputs = Input((resize_image_height_to, resize_image_width_to, 1)) #  1 channel, x rows, y = x columns
 
     # convolution

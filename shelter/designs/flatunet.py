@@ -41,6 +41,9 @@ def preprocess(imgs):
 
 # MODEL
 def build():
+
+    print('using model: flatunet') 
+
     inputs = Input((resize_image_height_to, resize_image_width_to, 1))
     conv1 = Conv2D(64, (3, 3), activation='relu', padding='same')(inputs)
     bn1 = BatchNormalization(momentum=0.01)(conv1)
