@@ -12,7 +12,7 @@ from shelter.designs.components.loss_functions import dice_coef_loss
 
 # CITATION
 # - https://blog.deepsense.ai/deep-learning-for-satellite-imagery-via-image-segmentation/
-# - https://blog.deepsense.ai/wp-content/uploads/2017/04/architecture_details.png
+# - https://deepsense.ai/wp-content/uploads/2017/04/architecture_overview.png
 #   Note: they use 20 input layers.
 
 
@@ -105,11 +105,11 @@ def build():
 
     up9 = concatenate([Conv2DTranspose(32, (2, 2), strides=(2, 2), padding='same')(conv8), conv1], axis=3)
     bn9 = BatchNormalization(momentum=0.01)(up9)
-    conv9 = Conv2D(62, (3, 3), activation='relu', padding='same')(up9)
+    conv9 = Conv2D(64, (3, 3), activation='relu', padding='same')(up9)
     bn9 = BatchNormalization(momentum=0.01)(conv9)
-    conv9 = Conv2D(62, (3, 3), activation='relu', padding='same')(conv9)
+    conv9 = Conv2D(64, (3, 3), activation='relu', padding='same')(conv9)
     bn9 = BatchNormalization(momentum=0.01)(conv9)
-    conv9 = Conv2D(62, (3, 3), activation='relu', padding='same')(conv9)
+    conv9 = Conv2D(64, (3, 3), activation='relu', padding='same')(conv9)
 
     conv10 = Conv2D(1, (1, 1), activation='sigmoid')(conv9)
 
