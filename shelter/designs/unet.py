@@ -11,8 +11,7 @@ from shelter.designs.components.loss_functions import dice_coef_loss
 
 
 # CITATION
-# - https://blog.deepsense.ai/deep-learning-for-satellite-imagery-via-image-segmentation/
-# - https://blog.deepsense.ai/wp-content/uploads/2017/04/architecture_details.png
+# - U-Net: https://arxiv.org/pdf/1505.04597.pdf
 #   Note: they use 20 input layers.
 
 
