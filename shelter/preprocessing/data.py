@@ -14,40 +14,47 @@ def rgb2gray(rgb):
 def create_train_data(data_path):
     train_data_path = os.path.join(data_path, 'input/train')
     images = [path for path in os.listdir(train_data_path) if not path.startswith('Icon')]
-    total = int(len(images) / 2)
+
+    sample_filename=[]
+    mask_filename=[]
+    for i, sample_name in enumerate(images):
+        if 'sample' in sample_name and 'bmp' in sample_name:
+            #loop again and only include if there is a corressponding mask file
+            for j, mask_name in enumerate(images):
+                if sample_name.replace('sample','mask')==mask_name:
+                    sample_filename.append(sample_name)
+                    mask_filename.append(mask_name)
+
+    total = len(sample_filename)
+
+    print('Creating training images...')
+    print('Dataset size:', total)
 
     imgs = np.ndarray((total, image_rows, image_cols), dtype=np.uint8)
     imgs_mask = np.ndarray((total, image_rows, image_cols), dtype=np.uint8)
 
-    print('Creating training images...')
-    print('Dataset size:', len(images))
+    for i, image_name in enumerate(sample_filename):
 
-    for i, image_name in enumerate(images):
-        if not any(x in image_name for x in ['mask', '.bmp']):
-            image_mask_name = image_name.split('_sample.bmp')[0] + '_mask.bmp'
-            if 'DS_Store' in image_name: continue
-            if not ('sample' in image_name or 'mask' in image_name):continue
-            print ('image_name',image_name)
-            img = imread(os.path.join(train_data_path, image_name), as_gray=True)
-            img = np.array([img])
-            # img = img.squeeze()
+        img = imread(os.path.join(train_data_path, image_name), as_gray=True)
+        img = np.array([img])
+        # img = img.squeeze()
 
-            img_mask = imread(os.path.join(train_data_path, image_mask_name), as_gray=True)
-            img_mask = np.array([img_mask])
+        img_mask = imread(os.path.join(train_data_path, image_name.replace('sample','mask')), as_gray=True)
+        img_mask = np.array([img_mask])
 
-            imgs[i] = img
-            imgs_mask[i] = img_mask
+        imgs[i] = img
+        imgs_mask[i] = img_mask
 
-            # if i % 1000 == 0:
-            #     print('Done: {0}/{1} images'.format(i, total))
-            #     print("samp data type:")
-            #     print(img.dtype)
-            #     print("mask data type ")
-            #     print(img_mask.dtype)
-            #     print("samp shape ")
-            #     print(img.shape)
-            #     print("mask shape ")
-            #     print(img_mask.shape)
+        # if i % 100 == 0:
+        #     print('Done: {0}/{1} images'.format(i, total))
+        #     print("samp data type:")
+        #     print(img.dtype)
+        #     print("mask data type ")
+        #     print(img_mask.dtype)
+        #     print("samp shape ")
+        #     print(img.shape)
+        #     print("mask shape ")
+        #     print(img_mask.shape)
 
     print('Loading done.')
 
@@ -68,15 +75,20 @@ def create_test_data(data_path):
     images = [path for path in os.listdir(test_data_path) if not path.startswith('Icon')]
     total = len(images)
 
+    testSample_filename=[]
+    for i, testSample_name in enumerate(images):
+        if 'sample' in testSample_name and 'bmp' in testSample_name:
+                testSample_filename.append(testSample_name)
+
+    total = len(testSample_filename)
+
     imgs = np.ndarray((total, image_rows, image_cols), dtype=np.uint8)
     imgs_id = np.ndarray((total, ), dtype=np.int32)
 
     print('Creating test images...')
     print('Dataset size:', len(images))
 
-    for i, image_name in enumerate(images):
-        if 'DS_Store' in image_name: continue
-        if '.bmp' not in image_name: continue
+    for i, image_name in enumerate(testSample_filename):
         img_id = int(image_name.split('_')[0])
         img = imread(os.path.join(test_data_path, image_name), as_gray=True)
         img = np.array([img])
