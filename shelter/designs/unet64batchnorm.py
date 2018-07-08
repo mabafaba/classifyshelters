@@ -114,6 +114,10 @@ def build():
     conv10 = Conv2D(1, (1, 1), activation='sigmoid')(conv9)
 
     model = Model(inputs=[inputs], outputs=[conv10])
+
+    #print layout of model:
+    model.summary()
+
     model.compile(optimizer=Adam(lr=1e-5), loss=dice_coef_loss, metrics=[dice_coef])
 
     return model
