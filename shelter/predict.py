@@ -40,13 +40,14 @@ def predict(data_path,model):
 
     ckpt_path = os.path.join(data_path, 'internal/checkpoints')
     ckpt_file = os.path.join(ckpt_path, 'weights.h5')
+    #ckpt_file = os.path.join(ckpt_path, 'weights_file.h5') #or enter specific weights file here.
     model.load_weights(ckpt_file)
 
     print('Predicting masks on test data...')
     imgs_mask_test = model.predict(imgs_test, verbose=1)
 
     out_path = os.path.join(data_path, 'output')
-    out_file = os.path.join(data_path, 'internal/imgs_mask_test.npy')
+    out_file = os.path.join(data_path, 'internal/npy/imgs_mask_test.npy')
     np.save(out_file, imgs_mask_test)
 
     print('Saving predicted masks to files...')
