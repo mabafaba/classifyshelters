@@ -32,6 +32,8 @@ def create_train_data(data_path):
 
     imgs = np.ndarray((total, image_rows, image_cols), dtype=np.uint8)
     imgs_mask = np.ndarray((total, image_rows, image_cols), dtype=np.uint8)
+    print('imgs.shape =',imgs.shape)
+    print('imgs_mask.shape =',imgs_mask.shape)
 
     for i, image_name in enumerate(sample_filename):
 
