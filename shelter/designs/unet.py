@@ -16,8 +16,7 @@ from shelter.designs.components.loss_functions import dice_coef
 #   Note: they use 20 input layers.
 
 
-# MODEL PARAMETERS
-smooth = 1.0
+# resize input matrix
 resize_image_height_to = 128
 resize_image_width_to = 128
 
@@ -80,12 +79,14 @@ def build():
     conv7   = Conv2D(128, (3, 3), activation='relu', padding='same')(concat7)
     conv7   = Conv2D(128, (3, 3), activation='relu', padding='same')(conv7)
 
-    up8     = concatenate([Conv2DTranspose(64, (2, 2), strides=(2, 2), padding='same')(conv7), conv2], axis=3)
-    conv8   = Conv2D(64, (3, 3), activation='relu', padding='same')(up8)
+    up8     = Conv2DTranspose(64, (2, 2), strides=(2, 2), padding='same')(conv7)
+    concat8 = concatenate([up8, conv2], axis=3)
+    conv8   = Conv2D(64, (3, 3), activation='relu', padding='same')(concat8)
     conv8   = Conv2D(64, (3, 3), activation='relu', padding='same')(conv8)
 
-    up9 = concatenate([Conv2DTranspose(32, (2, 2), strides=(2, 2), padding='same')(conv8), conv1], axis=3)
-    conv9 = Conv2D(32, (3, 3), activation='relu', padding='same')(up9)
+    up9 = Conv2DTranspose(32, (2, 2), strides=(2, 2), padding='same')(conv8)
+    concat9 = concatenate([up9, conv1], axis=3)
+    conv9 = Conv2D(32, (3, 3), activation='relu', padding='same')(concat9)
     conv9 = Conv2D(32, (3, 3), activation='relu', padding='same')(conv9)
 
     conv10 = Conv2D(1, (1, 1), activation='sigmoid')(conv9)
