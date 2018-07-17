@@ -44,7 +44,7 @@ def preprocess(imgs):
 # MODEL
 def build():
 
-    print('using model: unet64batchnorm') 
+    print('using model: unet64batchnorm (unet64filters but with batch normalization)') 
 
     # expected input shape
     inputs = Input((resize_image_height_to, resize_image_width_to, 1))
@@ -84,7 +84,7 @@ def build():
     bn5 = BatchNormalization(momentum=batchnorm_momentum)(conv5)
     conv5 = Conv2D(64, (3, 3), activation='relu', padding='same')(bn5)
 
-    up6 = concatenate([Conv2DTranspose(256, (2, 2), strides=(2, 2), padding='same')(conv5), conv4], axis=3)
+    up6 = concatenate([Conv2DTranspose(64, (2, 2), strides=(2, 2), padding='same')(conv5), conv4], axis=3)
     bn6 = BatchNormalization(momentum=batchnorm_momentum)(up6)
     conv6 = Conv2D(64, (3, 3), activation='relu', padding='same')(bn6)
     bn6 = BatchNormalization(momentum=batchnorm_momentum)(conv6)
@@ -92,7 +92,7 @@ def build():
     bn6 = BatchNormalization(momentum=batchnorm_momentum)(conv6)
     conv6 = Conv2D(64, (3, 3), activation='relu', padding='same')(bn6)
 
-    up7 = concatenate([Conv2DTranspose(128, (2, 2), strides=(2, 2), padding='same')(conv6), conv3], axis=3)
+    up7 = concatenate([Conv2DTranspose(64, (2, 2), strides=(2, 2), padding='same')(conv6), conv3], axis=3)
     bn7 = BatchNormalization(momentum=batchnorm_momentum)(up7)
     conv7 = Conv2D(64, (3, 3), activation='relu', padding='same')(up7)
     bn7 = BatchNormalization(momentum=batchnorm_momentum)(conv7)
@@ -108,7 +108,7 @@ def build():
     bn8 = BatchNormalization(momentum=batchnorm_momentum)(conv8)
     conv8 = Conv2D(64, (3, 3), activation='relu', padding='same')(conv8)
 
-    up9 = concatenate([Conv2DTranspose(32, (2, 2), strides=(2, 2), padding='same')(conv8), conv1], axis=3)
+    up9 = concatenate([Conv2DTranspose(64, (2, 2), strides=(2, 2), padding='same')(conv8), conv1], axis=3)
     bn9 = BatchNormalization(momentum=batchnorm_momentum)(up9)
     conv9 = Conv2D(64, (3, 3), activation='relu', padding='same')(up9)
     bn9 = BatchNormalization(momentum=batchnorm_momentum)(conv9)
