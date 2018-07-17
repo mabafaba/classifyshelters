@@ -21,16 +21,16 @@ from shelter.preprocessing.data import load_train_data
 # preprocess(): reshape input data
 
 
-def train(data_path,model,
+def train(data_path,model_str,
           number_of_epochs=2,
           batch_size=10,
-          test_data_fraction=0.15):
+          test_data_fraction=0.15,checkpoint_period=10):
 
     #add models here:
-    if model=='unet':from shelter.designs import unet as design
-    if model=='unet64filters':from shelter.designs import unet64filters as design
-    if model=='flatunet':from shelter.designs import flatunet as design
-    if model=='unet64batchnorm':from shelter.designs import unet64batchnorm as design
+    if model_str=='unet':from shelter.designs import unet as design
+    if model_str=='unet64filters':from shelter.designs import unet64filters as design
+    if model_str=='flatunet':from shelter.designs import flatunet as design
+    if model_str=='unet64batchnorm':from shelter.designs import unet64batchnorm as design
 
     # DATA LOADING AND PREPROCESSING
     print('Loading and preprocessing train data...')
@@ -64,12 +64,15 @@ def train(data_path,model,
     #print layout of model:
     model.summary()
 
-    # set up saving weights at checkpoints
+    # set up saving weights at checkpoints,
+    if not os.path.exists(data_path+'/internal/checkpoints'): os.makedirs(data_path+'/internal/checkpoints')
     ckpt_dir = os.path.join(data_path, 'internal/checkpoints')
-    ckpt_file = os.path.join(ckpt_dir, 'weights.h5')
+    ckpt_file = os.path.join(ckpt_dir, 'weights_'+model_str+'_epoch{epoch:02d}.h5')
     model_checkpoint = ModelCheckpoint(ckpt_file,
                                        monitor='val_loss',
-                                       save_best_only=True)
+                                       save_best_only=True,
+                                       save_weights_only=True,
+                                       period=checkpoint_period)
 
     # FIT MODEL
     print('Fitting model...')
@@ -80,6 +83,8 @@ def train(data_path,model,
               shuffle=True,
               validation_split=test_data_fraction,
               callbacks=[model_checkpoint])
+
+    model.save(ckpt_dir+'/weights_'+model_str+'.h5') #save model and final weights.
 
     return model_out
 
