@@ -28,7 +28,9 @@ def train(data_path,model,
 
     #add models here:
     if model=='unet':from shelter.designs import unet as design
+    if model=='unet64filters':from shelter.designs import unet64filters as design
     if model=='flatunet':from shelter.designs import flatunet as design
+    if model=='unet64batchnorm':from shelter.designs import unet64batchnorm as design
 
     # DATA LOADING AND PREPROCESSING
     print('Loading and preprocessing train data...')
@@ -58,8 +60,10 @@ def train(data_path,model,
 
     # BUILD MODEL
     print('Creating and compiling model...')
-    # get_unet()
     model = design.build()
+    #print layout of model:
+    model.summary()
+
     # set up saving weights at checkpoints
     ckpt_dir = os.path.join(data_path, 'internal/checkpoints')
     ckpt_file = os.path.join(ckpt_dir, 'weights.h5')

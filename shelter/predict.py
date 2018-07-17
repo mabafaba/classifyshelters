@@ -12,7 +12,9 @@ def predict(data_path,model):
 
     #add models here:
     if model=='unet':from shelter.designs import unet as design
+    if model=='unet64filters':from shelter.designs import unet64filters as design
     if model=='flatunet':from shelter.designs import flatunet as design
+    if model=='unet64batchnorm':from shelter.designs import unet64batchnorm as design
 
     # input_path = os.path.join(data_path, 'input')
     imgs_train, imgs_mask_train = load_train_data(data_path)
