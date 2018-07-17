@@ -41,7 +41,7 @@ def preprocess(imgs):
 # MODEL
 def build():
 
-    print('using model: unet64filters') 
+    print('using model: unet64filters (unet but all kernels/filters made to be 64)') 
 
     # expected input shape
     inputs = Input((resize_image_height_to, resize_image_width_to, 1)) #  1 channel, x rows, y = x columns
