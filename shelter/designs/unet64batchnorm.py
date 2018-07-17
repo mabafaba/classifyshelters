@@ -42,7 +42,10 @@ def preprocess(imgs):
 
 # MODEL
 def build():
-# expected input shape
+
+    print('using model: unet64batchnorm') 
+
+    # expected input shape
     inputs = Input((resize_image_height_to, resize_image_width_to, 1))
     conv1 = Conv2D(64, (3, 3), activation='relu', padding='same')(inputs)
     bn1 = BatchNormalization(momentum=0.01)(conv1)
@@ -115,9 +118,6 @@ def build():
     conv10 = Conv2D(1, (1, 1), activation='sigmoid')(conv9)
 
     model = Model(inputs=[inputs], outputs=[conv10])
-
-    #print layout of model:
-    model.summary()
 
     model.compile(optimizer=Adam(lr=1e-5), loss=dice_coef_loss, metrics=[dice_coef])
 

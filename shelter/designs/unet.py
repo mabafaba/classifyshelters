@@ -92,9 +92,6 @@ def build():
 
     model = Model(inputs=[inputs], outputs=[conv10])
 
-    #print layout of model:
-    model.summary()
-
     # dont know why but i had commented this line.. which stopped loading existing weights (?)
     # aha: IF YOU HAVE NO WEIGHTS YET YOU NEED TO UNCOMMENT THIS LINE
     # when you run the the n>1th time copy the weights.h5 file from /output/ to /checkpoints/

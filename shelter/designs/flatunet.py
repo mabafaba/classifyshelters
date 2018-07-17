@@ -117,9 +117,6 @@ def build():
 
     model = Model(inputs=[inputs], outputs=[conv10])
 
-    #print layout of model:
-    model.summary()
-
     # model.compile(optimizer=Adam(lr=1e-5), loss='binary_crossentropy', metrics=['binary_accuracy']) #modified by rizki.
     model.compile(optimizer=Adam(lr=1e-5), loss=dice_coef_loss, metrics=[dice_coef,'binary_accuracy'])
 

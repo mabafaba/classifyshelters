@@ -41,7 +41,10 @@ def preprocess(imgs):
 
 # MODEL
 def build():
-# expected input shape
+
+    print('using model: unet64filters') 
+
+    # expected input shape
     inputs = Input((resize_image_height_to, resize_image_width_to, 1)) #  1 channel, x rows, y = x columns
 
     # convolution
@@ -89,14 +92,10 @@ def build():
 
     model = Model(inputs=[inputs], outputs=[conv10])
 
-    #print layout of model:
-
-    model.summary()
-
     # dont know why but i had commented this line.. which stopped loading existing weights (?)
     # aha: IF YOU HAVE NO WEIGHTS YET YOU NEED TO UNCOMMENT THIS LINE
     # when you run the the n>1th time copy the weights.h5 file from /output/ to /checkpoints/
-    model.load_weights("weights.h5")
+    # model.load_weights("weights.h5")
     model.compile(optimizer=Adam(lr=1e-3), loss=dice_coef_loss, metrics=[dice_coef])
 
     return model
