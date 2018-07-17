@@ -73,7 +73,6 @@ def load_train_data(data_path):
 def create_test_data(data_path):
     test_data_path = os.path.join(data_path, 'input/test')
     images = [path for path in os.listdir(test_data_path) if not path.startswith('Icon')]
-    total = len(images)
 
     testSample_filename=[]
     for i, testSample_name in enumerate(images):
@@ -86,7 +85,7 @@ def create_test_data(data_path):
     imgs_id = np.ndarray((total, ), dtype=np.int32)
 
     print('Creating test images...')
-    print('Dataset size:', len(images))
+    print('Dataset size:', total)
 
     for i, image_name in enumerate(testSample_filename):
         img_id = int(image_name.split('_')[0])
