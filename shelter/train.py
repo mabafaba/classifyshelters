@@ -8,7 +8,7 @@ from keras import backend as K
 from keras.models import Model
 from keras.optimizers import Adam
 from keras.layers import BatchNormalization
-from keras.callbacks import ModelCheckpoint
+from keras.callbacks import ModelCheckpoint,CSVLogger
 from keras.layers import Input, concatenate, Conv2D, MaxPooling2D, Conv2DTranspose
 
 K.set_image_data_format('channels_last')  # TF dimension ordering in this code
@@ -73,6 +73,9 @@ def train(data_path,model_str,
                                        save_best_only=True,
                                        save_weights_only=True,
                                        period=checkpoint_period)
+    # save epoch logs to txt
+    CSV_LOG_FILENAME = os.path.join(ckpt_dir,'log_'+model_str+'.csv')
+    csv_logger = CSVLogger(CSV_LOG_FILENAME)
 
     # FIT MODEL
     print('Fitting model...')
@@ -82,7 +85,7 @@ def train(data_path,model_str,
               verbose=1,
               shuffle=True,
               validation_split=test_data_fraction,
-              callbacks=[model_checkpoint])
+              callbacks=[model_checkpoint,csv_logger])
 
     model.save(ckpt_dir+'/weights_'+model_str+'.h5') #save model and final weights.
 
