@@ -8,13 +8,13 @@ K.set_image_data_format('channels_last')  # TF dimension ordering in this code
 
 
 
-def predict(data_path,model):
+def predict(data_path,model_str):
 
     #add models here:
-    if model=='unet':from shelter.designs import unet as design
-    if model=='unet64filters':from shelter.designs import unet64filters as design
-    if model=='flatunet':from shelter.designs import flatunet as design
-    if model=='unet64batchnorm':from shelter.designs import unet64batchnorm as design
+    if model_str=='unet':from shelter.designs import unet as design
+    if model_str=='unet64filters':from shelter.designs import unet64filters as design
+    if model_str=='flatunet':from shelter.designs import flatunet as design
+    if model_str=='unet64batchnorm':from shelter.designs import unet64batchnorm as design
 
     # input_path = os.path.join(data_path, 'input')
     imgs_train, imgs_mask_train = load_train_data(data_path)
@@ -36,12 +36,12 @@ def predict(data_path,model):
     imgs_test = imgs_test.astype('float32')
     imgs_test -= mean
     imgs_test /= std
-    print('Loading saved weights...')
 
     ckpt_path = os.path.join(data_path, 'internal/checkpoints')
-    ckpt_file = os.path.join(ckpt_path, 'weights.h5')
+    ckpt_file = os.path.join(ckpt_path, 'weights_'+model_str+'.h5')
     #ckpt_file = os.path.join(ckpt_path, 'weights_file.h5') #or enter specific weights file here.
     model.load_weights(ckpt_file)
+    print('Loading saved weights :',ckpt_file)
 
     print('Predicting masks on test data...')
     imgs_mask_test = model.predict(imgs_test, verbose=1)
