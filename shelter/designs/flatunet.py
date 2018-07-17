@@ -8,7 +8,7 @@ from keras.layers import BatchNormalization
 from keras.layers import Input, concatenate, Conv2D, MaxPooling2D, Conv2DTranspose
 
 from shelter.designs.components.loss_functions import dice_coef_loss
-
+from shelter.designs.components.loss_functions import dice_coef
 
 # CITATION
 # - https://blog.deepsense.ai/deep-learning-for-satellite-imagery-via-image-segmentation/

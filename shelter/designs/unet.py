@@ -8,6 +8,7 @@ from keras.layers import BatchNormalization
 from keras.layers import Input, concatenate, Conv2D, MaxPooling2D, Conv2DTranspose
 
 from shelter.designs.components.loss_functions import dice_coef_loss
+from shelter.designs.components.loss_functions import dice_coef
 
 
 # CITATION
@@ -98,7 +99,7 @@ def build():
     # aha: IF YOU HAVE NO WEIGHTS YET YOU NEED TO UNCOMMENT THIS LINE
     # when you run the the n>1th time copy the weights.h5 file from /output/ to /checkpoints/
     # model.load_weights("weights.h5")
-    model.compile(optimizer=Adam(lr=1e-5), loss=dice_coef_loss, metrics=[dice_coef_loss])
+    model.compile(optimizer=Adam(lr=1e-5), loss=dice_coef_loss, metrics=[dice_coef,'binary_accuracy'])
 
     return model
 
