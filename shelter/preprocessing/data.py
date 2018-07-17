@@ -60,6 +60,7 @@ def create_train_data(data_path):
 
     print('Loading done.')
 
+    if not os.path.exists(data_path+'/internal/npy'): os.makedirs(data_path+'/internal/npy')
     np.save(os.path.join(data_path, 'internal/npy/imgs_train.npy'), imgs)
     np.save(os.path.join(data_path, 'internal/npy/imgs_mask_train.npy'), imgs_mask)
     print('Saving to .npy files done.')
@@ -104,6 +105,7 @@ def create_test_data(data_path):
         #     print(img.shape)
 
     print('Loading done.')
+    if not os.path.exists(data_path+'/internal/npy'): os.makedirs(data_path+'/internal/npy')
     np.save(os.path.join(data_path, 'internal/npy/imgs_test.npy'), imgs)
     np.save(os.path.join(data_path, 'internal/npy/imgs_id_test.npy'), imgs_id)
     print('Saving to .npy files done.')
