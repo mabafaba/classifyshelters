@@ -12,30 +12,13 @@ from shelter.designs.components.loss_functions import dice_coef
 
 
 # CITATION
-# - U-Net: https://arxiv.org/pdf/1505.04597.pdf
+# - U-Net: https://arxiv.org/pdf/1505.04597.pdf (https://lmb.informatik.uni-freiburg.de/people/ronneber/u-net/u-net-architecture.png)
 #   Note: they use 20 input layers.
 
 
 # resize input matrix
 resize_image_height_to = 128
 resize_image_width_to = 128
-
-
-# PREPARING DATA
-def preprocess(imgs):
-    # resize images
-    imgs_p = np.ndarray((imgs.shape[0],
-                         resize_image_height_to,
-                         resize_image_width_to),
-                        dtype=np.uint8)
-
-    for i in range(imgs.shape[0]):
-        imgs_p[i] = resize(imgs[i],
-                           (resize_image_width_to, resize_image_height_to),
-                           preserve_range=True)
-    imgs_p = imgs_p[..., np.newaxis]
-
-    return imgs_p
 
 
 # MODEL
@@ -93,8 +76,6 @@ def build():
 
     model = Model(inputs=[inputs], outputs=[conv10])
 
-    # dont know why but i had commented this line.. which stopped loading existing weights (?)
-    # aha: IF YOU HAVE NO WEIGHTS YET YOU NEED TO UNCOMMENT THIS LINE
     # when you run the the n>1th time copy the weights.h5 file from /output/ to /checkpoints/
     # model.load_weights("weights.h5")
     model.compile(optimizer=Adam(lr=1e-5), loss=dice_coef_loss, metrics=[dice_coef,'binary_accuracy'])

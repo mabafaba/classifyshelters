@@ -22,23 +22,6 @@ resize_image_height_to = 128
 resize_image_width_to = 128
 
 
-# PREPARING DATA
-def preprocess(imgs):
-    # resize images
-    imgs_p = np.ndarray((imgs.shape[0],
-                         resize_image_height_to,
-                         resize_image_width_to),
-                        dtype=np.uint8)
-
-    for i in range(imgs.shape[0]):
-        imgs_p[i] = resize(imgs[i],
-                           (resize_image_width_to, resize_image_height_to),
-                           preserve_range=True)
-    imgs_p = imgs_p[..., np.newaxis]
-
-    return imgs_p
-
-
 # MODEL
 def build():
 

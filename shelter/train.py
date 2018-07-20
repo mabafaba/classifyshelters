@@ -14,6 +14,9 @@ from keras.layers import Input, concatenate, Conv2D, MaxPooling2D, Conv2DTranspo
 K.set_image_data_format('channels_last')  # TF dimension ordering in this code
 
 from shelter.preprocessing.data import load_train_data
+from shelter.preprocessing.data import preprocess
+from shelter.preprocessing.data import normalize
+from shelter.preprocessing.data import normalize_mask
 
 # MODEL
 # every design module should have a least:
@@ -36,27 +39,13 @@ def train(data_path,model_str,
     print('Loading and preprocessing train data...')
 
     # load input images
-    # input_path = os.path.join(data_path, 'model_input')
-    input_path = data_path
-    imgs_train, imgs_mask_train = load_train_data(input_path)
-    imgs_train = design.preprocess(imgs_train)
-    imgs_mask_train = design.preprocess(imgs_mask_train)
-    imgs_train = imgs_train.astype('float32')
+    imgs_train, imgs_mask_train = load_train_data(data_path)
 
-    # normalise data
-    # this should probably happen in the preprocessing function or something.. not here
-    mean = np.mean(imgs_train)  # mean for data centering
-    std = np.std(imgs_train)  # std for data normalization
-    imgs_train -= mean
-    if std != 0:
-        imgs_train /= std
+    imgs_train = preprocess(imgs_train)
+    imgs_mask_train = preprocess(imgs_mask_train)
 
-    # load label masks
-    imgs_mask_train = imgs_mask_train.astype('float32')
-    # this should probably happen in the preprocessing function or something.. not here
-    # i guess ideally we would have one preprocessing function for the input and one for the ground truths
-    # scale masks to [0, 1]
-    imgs_mask_train /= 255.  
+    imgs_train = normalize(imgs_train)
+    imgs_mask_train = normalize_mask(imgs_mask_train)
 
     # BUILD MODEL
     print('Creating and compiling model...')
@@ -96,6 +85,6 @@ def train(data_path,model_str,
 if __name__ == '__main__':
     data_path = '/media/data/180505_v1/'
 
-    train(data_path)
+    train(data_path,'unet')
 
 
